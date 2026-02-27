@@ -68,10 +68,10 @@ The CLI provides **100+ commands** across these groups:
 | **links** | `backlinks`, `links`, `unresolved`, `orphans`, `deadends` | Graph and link analysis |
 | **bookmarks** | `bookmarks` | Bookmark management |
 | **templates** | `templates`, `template:read`, `template:insert` | Template listing, rendering, insertion |
-| **plugins** | `plugins`, `plugin:enable`, `plugin:disable`, `plugin:install`, `plugin:reload` | Plugin management |
+| **plugins** | `plugins`, `plugin:enable`, `plugin:disable`, `plugin:install`, `plugin:uninstall`, `plugin:reload` | Plugin management |
 | **sync** | `sync`, `sync:status`, `sync:history`, `sync:read`, `sync:restore`, `sync:deleted` | Obsidian Sync operations |
-| **themes** | `themes` | Theme management |
-| **dev** | `dev:screenshot`, `eval`, `dev:console`, `dev:errors` | Developer/debugging tools |
+| **themes** | `themes`, `themes versions` | Theme management |
+| **dev** | `dev:screenshot`, `eval`, `dev:debug`, `dev:console`, `dev:errors` | Developer/debugging tools |
 | **vault** | `vault`, `vaults`, `version` | Vault info and metadata |
 | **other** | `outline`, `wordcount`, `recents`, `reload` | Utility commands |
 
@@ -104,8 +104,8 @@ obsidian daily:prepend content="## Morning Notes"
 ```bash
 obsidian search query="project alpha"
 obsidian search query="TODO" path="projects" limit=10
-obsidian search query="meeting" format=json
-obsidian search query="urgent" matches case
+obsidian search query="meeting" format=json   # Returns JSON array of file paths
+obsidian search query="urgent" case
 ```
 
 ### Properties & Tags
@@ -122,18 +122,20 @@ obsidian tag name="project/alpha"
 ### Tasks
 
 ```bash
-obsidian tasks                          # All incomplete tasks
+obsidian tasks                          # All tasks (done + todo) — same as tasks all in v1.12
 obsidian tasks all                      # All tasks (done + todo)
 obsidian tasks done                     # Completed only
 obsidian tasks daily                    # Tasks in today's daily note
 obsidian task path="note.md" line=12 toggle
+obsidian tasks | grep "\[ \]"           # Workaround: filter to incomplete only
 ```
 
 ### Developer & Automation
 
 ```bash
 obsidian eval code="app.vault.getFiles().length"
-obsidian dev:screenshot path="screenshot.png"
+obsidian dev:screenshot path="folder/screenshot.png"  # Path must be vault-relative
+obsidian dev:debug on                                 # Required before dev:console
 obsidian dev:console limit=20
 obsidian dev:errors
 ```
@@ -178,7 +180,7 @@ obsidian daily:append content="- Started [[projects/new-feature|New Feature]]"
 ```bash
 obsidian files total                    # Total file count
 obsidian tags counts sort=count         # Most used tags
-obsidian tasks                          # Open tasks across vault
+obsidian tasks | grep "\[ \]"          # Incomplete tasks across vault
 obsidian orphans                        # Notes needing integration
 obsidian unresolved                     # Broken links to fix
 ```
@@ -186,7 +188,7 @@ obsidian unresolved                     # Broken links to fix
 ### Search and Extract for AI Processing
 
 ```bash
-obsidian search query="meeting notes" format=json | jq '.[] | .path'
+obsidian search query="meeting notes" format=json | jq '.[]'
 obsidian read path="meetings/standup.md" | grep "Action item"
 ```
 
@@ -204,7 +206,7 @@ obsidian sync:restore path="important.md" version=3  # Rollback
 2. **`create` paths omit `.md`** — the extension is added automatically.
 3. **`move` requires full target path** including `.md` extension.
 4. **Pipe-friendly** — plain text output works with `grep`, `awk`, `sed`, `jq`.
-5. **JSON output** — use `format=json` on search and file commands for machine parsing.
+5. **JSON output** — use `format=json` on `search` for a JSON array of file paths. The `files` command does not support JSON output.
 6. **Stderr noise** — GPU/Electron warnings on headless are harmless; filter with `2>/dev/null`.
 7. **`daily:prepend`** inserts content after frontmatter, not at byte 0.
 8. **Use `eval`** to run arbitrary JavaScript against the Obsidian API (`app.*`).
