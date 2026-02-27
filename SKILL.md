@@ -85,7 +85,7 @@ obsidian create path="folder/note" content="# New Note"
 obsidian create path="folder/note" template="meeting-notes"
 obsidian append path="folder/note.md" content="New paragraph"
 obsidian prepend path="folder/note.md" content="Top content"
-obsidian move path="old/note.md" name="new-name"
+obsidian move path="old/note.md" to="new/note.md"
 obsidian delete path="folder/note.md"
 obsidian delete path="folder/note.md" permanent
 ```

@@ -63,11 +63,11 @@ obsidian prepend path="folder/note.md" content="Prepended text"
 ### Moving & Renaming
 
 ```bash
-obsidian move path="old/path/note.md" name="new-name"
+obsidian move path="old/path/note.md" to="new/path/note.md"
 ```
 
-- `name=` is the new filename (moves/renames).
-- The target path must include the `.md` extension when specifying a full path.
+- `to=` is the full vault-relative target path including the `.md` extension.
+- Can be used to move, rename, or both in a single command.
 
 ### Deleting
 
