@@ -83,7 +83,6 @@ obsidian files                       # List all files in vault
 obsidian files ext=md                # Filter by extension
 obsidian files folder="subfolder"    # Files in specific folder
 obsidian files total                 # Just the file count
-obsidian files format=json           # JSON output
 obsidian folders                     # List all folders
 obsidian file path="folder/note.md"  # File info (size, created, modified dates)
 ```
@@ -116,8 +115,8 @@ Full-text search across the vault.
 obsidian search query="search text"
 obsidian search query="text" path="folder"         # Scope to folder
 obsidian search query="text" limit=10               # Limit results
-obsidian search query="text" format=json            # JSON output
-obsidian search query="text" matches                # Include match context/snippets
+obsidian search query="text" format=json            # JSON output (array of file paths)
+obsidian search query="text" matches                # Accepted but returns file paths only
 obsidian search query="text" case                   # Case-sensitive search
 ```
 
@@ -125,8 +124,8 @@ obsidian search query="text" case                   # Case-sensitive search
 - `query=` — Search term (required)
 - `path=` — Restrict search to a folder
 - `limit=` — Maximum number of results
-- `format=json` — Machine-readable JSON output
-- `matches` — Show matching line context
+- `format=json` — Returns a JSON array of matching file paths: `["folder/note.md", ...]`
+- `matches` — Flag accepted by the CLI but does not return match context/snippets in v1.12
 - `case` — Enable case-sensitive matching
 
 ---
@@ -196,12 +195,14 @@ Query and manage checkbox tasks across the vault.
 ### Querying Tasks
 
 ```bash
-obsidian tasks                         # All incomplete tasks
+obsidian tasks                         # All tasks (same as tasks all in v1.12)
 obsidian tasks all                     # All tasks (complete + incomplete)
 obsidian tasks done                    # Only completed tasks
 obsidian tasks path="note.md"          # Tasks in a specific file
 obsidian tasks daily                   # Tasks in today's daily note
 ```
+
+> **Note:** In v1.12, `tasks` with no arguments returns all tasks (complete + incomplete), identical to `tasks all`. Filtering to incomplete-only is not currently supported without post-processing (e.g. pipe to `grep "\[ \]"`).
 
 ### Toggling Task Status
 
@@ -248,13 +249,15 @@ Work with note templates (requires Templates or Templater plugin).
 obsidian templates                                      # List available templates
 obsidian template:read name="weekly-review"             # Read template content
 obsidian template:read name="weekly-review" resolve title="My Note"  # Render with variables
-obsidian template:insert name="weekly-review"           # Insert template into active file
+obsidian template:insert name="weekly-review"           # Insert template into the active Obsidian UI file
 ```
 
 **Parameters:**
 - `name=` — Template name (without path prefix or extension)
-- `resolve` — Process template variables
+- `resolve` — Process template variables (`{{date}}`, `{{title}}`, etc.)
 - Title and other variables can be passed as `key=value` for template rendering.
+
+> **Note:** `template:insert` inserts into whichever file is currently active in the Obsidian UI — it does not accept a `path=` parameter. To create a new file from a template, use `obsidian create path="..." template="..."` instead.
 
 ---
 
@@ -263,14 +266,17 @@ obsidian template:insert name="weekly-review"           # Insert template into a
 Manage community and core plugins.
 
 ```bash
-obsidian plugins                       # List all installed plugins
-obsidian plugins:enabled               # Only enabled plugins
-obsidian plugins versions              # Plugins with version numbers
-obsidian plugin:enable id="canvas"     # Enable a plugin
-obsidian plugin:disable id="canvas"    # Disable a plugin
-obsidian plugin:install id="dataview"  # Install from community plugins
-obsidian plugin:reload id="my-plugin"  # Reload a plugin (useful for dev)
+obsidian plugins                         # List all plugins (core + community)
+obsidian plugins:enabled                 # Only enabled plugins
+obsidian plugins versions                # Plugins with version numbers (community only)
+obsidian plugin:enable id="canvas"       # Enable a plugin
+obsidian plugin:disable id="canvas"      # Disable a plugin
+obsidian plugin:install id="dataview"    # Install from community plugins
+obsidian plugin:uninstall id="dataview"  # Uninstall a community plugin
+obsidian plugin:reload id="my-plugin"    # Reload a plugin (useful for dev)
 ```
+
+> **Note:** `plugins versions` only shows version numbers for community plugins. Core (built-in) plugins share Obsidian's version and display blank version fields.
 
 ---
 
@@ -296,10 +302,9 @@ obsidian sync:deleted                           # List files deleted via sync
 Manage appearance themes.
 
 ```bash
-obsidian themes                        # List available/installed themes
+obsidian themes                        # List installed themes
+obsidian themes versions               # List installed themes with version numbers
 ```
-
-Use `obsidian themes --help` for additional subcommands related to theme management (install, switch, etc.).
 
 ---
 
@@ -310,10 +315,10 @@ Debugging and development tools.
 ### Screenshots
 
 ```bash
-obsidian dev:screenshot path="screenshot.png"
+obsidian dev:screenshot path="folder/screenshot.png"
 ```
 
-Takes a screenshot of the Obsidian window and saves it.
+Takes a screenshot of the Obsidian window and saves it. **Path must be vault-relative** — absolute filesystem paths are silently ignored.
 
 ### JavaScript Evaluation
 
@@ -327,9 +332,13 @@ Executes arbitrary JavaScript in the Obsidian app context. Has access to the ful
 ### Console & Errors
 
 ```bash
-obsidian dev:console limit=20          # Recent console output
-obsidian dev:errors                    # Recent error messages
+obsidian dev:debug on              # Start capturing console output (required before dev:console)
+obsidian dev:debug off             # Stop capturing console output
+obsidian dev:console limit=20     # Recent console output (requires dev:debug on first)
+obsidian dev:errors                # Recent error messages
 ```
+
+> **Note:** `dev:console` will return an error unless `dev:debug on` has been run first in the current session.
 
 ---
 
@@ -369,9 +378,11 @@ obsidian tag name="urgent" | while read -r note; do
 done
 
 # Export search results as JSON and process with jq
-obsidian search query="meeting" format=json | jq '.[].path'
+# format=json returns an array of file path strings: ["folder/note.md", ...]
+obsidian search query="meeting" format=json | jq '.[]'
 
-# Filter console errors
+# Filter console errors (requires dev:debug on first)
+obsidian dev:debug on
 obsidian dev:console limit=50 | grep -i error
 ```
 
