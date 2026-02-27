@@ -12,7 +12,7 @@
       "author": {
         "name": "pablo-mano"
       },
-      "source": ".",
+      "source": "./plugins/obsidian-cli",
       "category": "productivity",
       "homepage": "https://github.com/pablo-mano/Obsidian-CLI-skill"
     }
