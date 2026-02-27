@@ -210,7 +210,7 @@ obsidian sync:restore path="important.md" version=3  # Rollback
 6. **Stderr noise** — GPU/Electron warnings on headless are harmless; filter with `2>/dev/null`.
 7. **`daily:prepend`** inserts content after frontmatter, not at byte 0.
 8. **Use `eval`** to run arbitrary JavaScript against the Obsidian API (`app.*`).
-9. **`template:insert`** inserts into the currently active file in the Obsidian UI — it does not accept a `path=` parameter. To create a file from a template via CLI, use `obsidian create path="..." template="..."` instead.
+9. **`template:insert`** inserts into the currently active file in the Obsidian UI — it does not accept a `path=` parameter. If no file is open, it returns `Error: No active editor. Open a file first.` To create a file from a template via CLI, use `obsidian create path="..." template="..."` instead.
 
 ## Troubleshooting
 

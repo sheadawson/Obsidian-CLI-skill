@@ -257,7 +257,7 @@ obsidian template:insert name="weekly-review"           # Insert template into t
 - `resolve` — Process template variables (`{{date}}`, `{{title}}`, etc.)
 - Title and other variables can be passed as `key=value` for template rendering.
 
-> **Note:** `template:insert` inserts into whichever file is currently active in the Obsidian UI — it does not accept a `path=` parameter. To create a new file from a template, use `obsidian create path="..." template="..."` instead.
+> **Note:** `template:insert` inserts into whichever file is currently active in the Obsidian UI — it does not accept a `path=` parameter. If no file is open, it returns `Error: No active editor. Open a file first.` To create a new file from a template, use `obsidian create path="..." template="..."` instead.
 
 ---
 
