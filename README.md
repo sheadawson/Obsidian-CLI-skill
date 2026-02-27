@@ -53,6 +53,17 @@ Covers **100+ commands** across all major areas:
 
 ### Claude Code — Plugin (native)
 
+**Option A — Marketplace install (recommended):**
+
+```
+/plugin marketplace add https://github.com/pablo-mano/Obsidian-CLI-skill
+/plugin install obsidian-cli
+```
+
+Done — the skill auto-triggers when you ask Claude to interact with Obsidian.
+
+**Option B — Direct plugin load:**
+
 1. Clone this repository:
    ```bash
    git clone https://github.com/pablo-mano/Obsidian-CLI-skill
@@ -61,9 +72,10 @@ Covers **100+ commands** across all major areas:
    ```bash
    claude --plugin-dir ./Obsidian-CLI-skill
    ```
-3. Done — the skill auto-triggers when you ask Claude to interact with Obsidian, automate vault operations, manage daily notes, search your vault, etc.
 
-**Persistent setup** — add to your project's `.claude/settings.json` so the plugin loads automatically:
+**Option C — Persistent via `settings.json`:**
+
+Add to your project's `.claude/settings.json`:
 ```json
 {
   "plugins": {
@@ -74,7 +86,7 @@ Covers **100+ commands** across all major areas:
 }
 ```
 
-> The `.claude-plugin/plugin.json` manifest makes this repository directly compatible with Claude Code's plugin system.
+> The `.claude-plugin/marketplace.json` manifest makes this repository compatible with Claude Code's marketplace system.
 
 ---
 
