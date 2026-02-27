@@ -108,6 +108,20 @@ Cursor has a native skills system (launched Feb 2026) that is directly compatibl
 
 ---
 
+### GitHub Copilot (VS Code)
+
+Copilot supports [custom instructions](https://docs.github.com/en/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot) via repository files:
+
+**Option A — Repository-wide (recommended):**
+1. Create `.github/copilot-instructions.md` in your repo.
+2. Paste the body of `SKILL.md` into the file.
+
+**Option B — Path-scoped:**
+1. Create `.github/instructions/obsidian-cli.instructions.md`
+2. Add frontmatter `applyTo: "**/*"` then paste the `SKILL.md` body.
+
+---
+
 ### Windsurf
 
 Windsurf uses a Rules system (`.windsurf/rules/`). Rules have a 12,000 character limit per file, so split the skill across two files:
@@ -144,20 +158,6 @@ Openclaw loads skills from the `skills/` directory at the project root using the
    cp -r Obsidian-CLI-skill /path/to/openclaw/skills/obsidian-cli
    ```
 3. Restart the Openclaw agent — skills are discovered automatically.
-
----
-
-### GitHub Copilot (VS Code)
-
-Copilot supports [custom instructions](https://docs.github.com/en/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot) via repository files:
-
-**Repository-wide** (applies to all files):
-1. Create `.github/copilot-instructions.md` in your repo.
-2. Paste the body of `SKILL.md` into the file.
-
-**Path-scoped** (optional alternative):
-1. Create `.github/instructions/obsidian-cli.instructions.md`
-2. Add frontmatter `applyTo: "**/*"` then paste the `SKILL.md` body.
 
 ---
 
