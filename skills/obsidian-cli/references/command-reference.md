@@ -22,8 +22,14 @@ All parameters use `key=value` syntax. Quote values containing spaces: `content=
 10. [Plugins](#plugins)
 11. [Sync](#sync)
 12. [Themes](#themes)
-13. [Developer](#developer)
-14. [Vault & System](#vault--system)
+13. [CSS Snippets](#css-snippets)
+14. [Commands & Hotkeys](#commands--hotkeys)
+15. [Obsidian Bases](#obsidian-bases)
+16. [History](#history)
+17. [Workspace & Tabs](#workspace--tabs)
+18. [Diff](#diff)
+19. [Developer](#developer)
+20. [Vault & System](#vault--system)
 
 ---
 
@@ -87,6 +93,22 @@ obsidian folders                     # List all folders
 obsidian file path="folder/note.md"  # File info (size, created, modified dates)
 ```
 
+### Random Notes
+
+```bash
+obsidian random           # Open a random note in Obsidian
+obsidian random:read      # Print content of a random note to stdout
+```
+
+### Renaming
+
+```bash
+obsidian rename path="folder/note.md" name="new-name"
+```
+
+- `name=` is the new filename only (no path, no `.md` extension).
+- Use `move` when you also want to change the folder.
+
 ---
 
 ## Daily Notes
@@ -98,6 +120,7 @@ obsidian daily                           # Open today's daily note in Obsidian
 obsidian daily:read                      # Print today's daily note content to stdout
 obsidian daily:append content="text"     # Append content to today's note
 obsidian daily:prepend content="text"    # Prepend content (after frontmatter)
+obsidian daily:path                      # Print vault-relative path of today's note
 ```
 
 **Notes:**
@@ -127,6 +150,25 @@ obsidian search query="text" case                   # Case-sensitive search
 - `format=json` — Returns a JSON array of matching file paths: `["folder/note.md", ...]`
 - `matches` — Flag accepted by the CLI but does not return match context/snippets in v1.12
 - `case` — Enable case-sensitive matching
+
+### Search with Context
+
+```bash
+obsidian search:context query="search text"
+obsidian search:context query="text" path="folder" limit=10
+obsidian search:context query="text" case
+obsidian search:context query="text" format=json
+```
+
+Returns matching lines with surrounding context (not just file paths). Useful when you need to see the actual content that matched rather than just file paths.
+
+### Open Search View
+
+```bash
+obsidian search:open query="search text"
+```
+
+Opens the Obsidian search panel in the UI with the given query.
 
 ---
 
@@ -234,10 +276,13 @@ obsidian deadends                          # Notes with no outgoing links
 Manage Obsidian bookmarks (requires Bookmarks core plugin).
 
 ```bash
-obsidian bookmarks                     # List all bookmarks
+obsidian bookmarks                                      # List all bookmarks
+obsidian bookmark file="folder/note.md"                 # Bookmark a note
+obsidian bookmark file="folder/note.md" subpath="#Heading"  # Bookmark a heading
+obsidian bookmark folder="projects"                     # Bookmark a folder
+obsidian bookmark search="query text" title="My Search" # Bookmark a search
+obsidian bookmark url="https://example.com" title="Link" # Bookmark a URL
 ```
-
-Bookmarks commands let you view and manage bookmarked notes, searches, and groups. Use `obsidian bookmarks --help` for all available subcommands.
 
 ---
 
@@ -269,6 +314,10 @@ Manage community and core plugins.
 obsidian plugins                         # List all plugins (core + community)
 obsidian plugins:enabled                 # Only enabled plugins
 obsidian plugins versions                # Plugins with version numbers (community only)
+obsidian plugins:restrict                # Show restricted mode status
+obsidian plugins:restrict on             # Enable restricted mode (disables community plugins)
+obsidian plugins:restrict off            # Disable restricted mode
+obsidian plugin id="dataview"            # Get info about a specific plugin
 obsidian plugin:enable id="canvas"       # Enable a plugin
 obsidian plugin:disable id="canvas"      # Disable a plugin
 obsidian plugin:install id="dataview"    # Install from community plugins
@@ -293,6 +342,7 @@ obsidian sync:history path="note.md"            # Version history for a file
 obsidian sync:read path="note.md" version=3     # Read a specific version
 obsidian sync:restore path="note.md" version=3  # Restore a previous version
 obsidian sync:deleted                           # List files deleted via sync
+obsidian sync:open                              # Open the Sync history view in the UI
 ```
 
 ---
@@ -302,8 +352,116 @@ obsidian sync:deleted                           # List files deleted via sync
 Manage appearance themes.
 
 ```bash
-obsidian themes                        # List installed themes
-obsidian themes versions               # List installed themes with version numbers
+obsidian themes                            # List installed themes
+obsidian themes versions                   # List installed themes with version numbers
+obsidian theme                             # Show the currently active theme
+obsidian theme name="Minimal"              # Get details about a specific theme
+obsidian theme:set name="Minimal"          # Switch to a theme
+obsidian theme:set name=""                 # Switch back to default theme
+obsidian theme:install name="Minimal"      # Install a community theme
+obsidian theme:install name="Minimal" enable  # Install and activate immediately
+obsidian theme:uninstall name="Minimal"    # Uninstall a theme
+```
+
+---
+
+## CSS Snippets
+
+Manage custom CSS snippet files (snippets live in `.obsidian/snippets/`).
+
+```bash
+obsidian snippets                          # List all installed CSS snippets
+obsidian snippets:enabled                  # List only enabled snippets
+obsidian snippet:enable name="my-style"    # Enable a snippet
+obsidian snippet:disable name="my-style"   # Disable a snippet
+```
+
+---
+
+## Commands & Hotkeys
+
+Execute any Obsidian command by its ID, and inspect hotkey bindings.
+
+```bash
+obsidian commands                          # List all available command IDs
+obsidian command id="app:reload"           # Execute a command by ID
+obsidian command id="editor:toggle-bold"   # Example: toggle bold in active editor
+obsidian hotkeys                           # List all hotkeys (tab-separated: id \t keybinding)
+obsidian hotkey id="app:open-settings"     # Get hotkey for a specific command
+obsidian hotkey id="app:open-settings" verbose  # Show if custom or default
+```
+
+**Typical workflow — find and run a command:**
+
+```bash
+obsidian commands | grep "canvas"          # Find canvas-related command IDs
+obsidian command id="canvas:new-file"      # Execute the matched command
+```
+
+**Getting plugin command IDs:**
+
+```bash
+obsidian commands | grep "dataview"        # List all Dataview plugin commands
+```
+
+---
+
+## Obsidian Bases
+
+Obsidian Bases (v1.12+) is a built-in database feature. Base files (`.base`) store structured data and support multiple views.
+
+```bash
+obsidian bases                                    # List all .base files in vault
+obsidian base:query file="tasks" format=json      # Query default view of a base
+obsidian base:query file="tasks" view="Kanban"    # Query a specific view
+obsidian base:query path="folder/tasks.base" format=csv  # Query by path
+obsidian base:views file="tasks"                  # List all views in a base file
+obsidian base:create file="tasks" title="Buy milk"  # Add an item to a base
+```
+
+**Supported output formats for `base:query`:** `json` (default), `csv`, `tsv`, `md`, `paths`
+
+---
+
+## History
+
+File version history (built-in to Obsidian, separate from Sync). Requires the File Recovery core plugin.
+
+```bash
+obsidian history:list                             # List all files that have history
+obsidian history path="folder/note.md"            # List versions of a specific file
+obsidian history:read path="folder/note.md"       # Read the latest saved version
+obsidian history:read path="folder/note.md" version=3  # Read a specific version
+obsidian history:restore path="folder/note.md" version=3  # Restore a version
+obsidian history:open path="folder/note.md"       # Open file recovery UI for a file
+```
+
+> **Note:** History is distinct from [Sync version history](#sync). History uses Obsidian's built-in File Recovery snapshots; Sync history uses Obsidian Sync cloud versions.
+
+---
+
+## Workspace & Tabs
+
+Inspect and manage the Obsidian workspace layout and open tabs.
+
+```bash
+obsidian workspace                                # Show the full workspace tree
+obsidian tabs                                     # List all open tabs (flat list)
+obsidian tab:open file="folder/note.md"           # Open a file in a new tab
+obsidian tab:open view="graph"                    # Open a view type in a new tab
+```
+
+---
+
+## Diff
+
+Compare local and sync versions of a file.
+
+```bash
+obsidian diff path="folder/note.md"               # List available versions (local + sync)
+obsidian diff path="folder/note.md" from=1 to=2   # Diff two specific versions
+obsidian diff path="folder/note.md" filter=local  # Show only local versions
+obsidian diff path="folder/note.md" filter=sync   # Show only sync versions
 ```
 
 ---
@@ -340,6 +498,38 @@ obsidian dev:errors                # Recent error messages
 
 > **Note:** `dev:console` will return an error unless `dev:debug on` has been run first in the current session.
 
+### DOM Inspection
+
+```bash
+obsidian dev:dom selector=".view-content"             # Get outerHTML of first match
+obsidian dev:dom selector=".view-content" all         # Get all matches
+obsidian dev:dom selector=".view-content" text        # Get text content
+obsidian dev:dom selector=".view-content" total       # Count matching elements
+obsidian dev:dom selector=".view-content" attr=class  # Get an attribute value
+obsidian dev:dom selector=".view-content" css=color   # Get a CSS property value
+```
+
+### CSS Inspection
+
+```bash
+obsidian dev:css selector=".view-content"              # Inspect CSS with source locations
+obsidian dev:css selector=".view-content" prop=color   # Filter by CSS property name
+```
+
+### Chrome DevTools Protocol
+
+```bash
+obsidian devtools                                      # Toggle Electron DevTools panel
+obsidian dev:cdp method="Runtime.evaluate" params='{"expression":"1+1"}'  # Run a CDP command
+```
+
+### Mobile Emulation
+
+```bash
+obsidian dev:mobile on                                 # Enable mobile emulation
+obsidian dev:mobile off                                # Disable mobile emulation
+```
+
 ---
 
 ## Vault & System
@@ -359,13 +549,31 @@ obsidian outline path="note.md"        # Heading structure of a note
 obsidian wordcount path="note.md"      # Word and character count
 obsidian recents                       # Recently opened files
 obsidian reload                        # Reload the vault (re-index)
+obsidian restart                       # Restart the Obsidian app
 ```
 
 ---
 
 ## Output Formatting & Piping
 
-The CLI outputs plain text by default, ideal for piping into Unix tools:
+The CLI outputs plain text by default, ideal for piping into Unix tools.
+
+### Supported `format=` values
+
+| Format | Description | Best for |
+|---|---|---|
+| `text` | Plain text (default) | Piping to grep/awk/sed |
+| `json` | JSON array or object | Processing with jq, AI agents |
+| `csv` | Comma-separated values | Spreadsheet import |
+| `tsv` | Tab-separated values | Shell parsing with cut/awk |
+| `yaml` | YAML output | Config-style processing |
+| `md` | Markdown table | Embedding results in notes |
+| `paths` | One path per line | Batch file operations |
+| `tree` | Tree view | Visual hierarchy |
+
+Not all formats are supported by every command. Use `text` or `json` when in doubt.
+
+### Examples
 
 ```bash
 # Count notes in a folder
@@ -380,6 +588,9 @@ done
 # Export search results as JSON and process with jq
 # format=json returns an array of file path strings: ["folder/note.md", ...]
 obsidian search query="meeting" format=json | jq '.[]'
+
+# Query a base as CSV
+obsidian base:query file="tasks" format=csv
 
 # Filter console errors (requires dev:debug on first)
 obsidian dev:debug on
