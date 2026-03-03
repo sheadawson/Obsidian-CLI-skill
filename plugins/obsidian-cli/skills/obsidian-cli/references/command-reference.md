@@ -196,6 +196,10 @@ obsidian property:set path="note.md" name="tags" value="[project, alpha]"
 obsidian property:set path="note.md" name="date" value="2026-02-27"
 ```
 
+> **Note:** `property:set` always stores `value=` as a string. Passing `value="[project, alpha]"` writes
+> the literal string `[project, alpha]`, not a YAML array. For true array-typed properties (e.g. `tags`),
+> edit the note's frontmatter directly or use `eval` with the Obsidian API.
+
 ### Remove Property
 
 ```bash
@@ -487,6 +491,17 @@ obsidian eval code="app.vault.getMarkdownFiles().map(f => f.path).join('\n')"
 
 Executes arbitrary JavaScript in the Obsidian app context. Has access to the full Obsidian API (`app`, `app.vault`, `app.workspace`, `app.metadataCache`, etc.).
 
+> **Multiline scripts:** Passing multiline JavaScript inline fails with "Invalid or unexpected token".
+> Write the code to a temp file and use command substitution instead:
+>
+> ```bash
+> cat > /tmp/obs.js << 'JS'
+> var files = app.vault.getMarkdownFiles();
+> files.map(f => f.path).join('\n');
+> JS
+> obsidian eval code="$(cat /tmp/obs.js)"
+> ```
+
 ### Console & Errors
 
 ```bash
@@ -610,6 +625,11 @@ obsidian "Archive" files total
 ```
 
 If the vault name contains spaces, quote it. The vault name must match what's shown in `obsidian vaults`.
+
+> **Compatibility note:** On some environments, `obsidian "My Vault" command` returns
+> `Error: Command "My Vault" not found`. If this occurs, omit the vault name — the CLI will target
+> the most recently active vault. Switch vaults in the Obsidian UI before running CLI commands
+> when targeting a specific vault.
 
 ---
 

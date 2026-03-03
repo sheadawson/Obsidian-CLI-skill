@@ -229,6 +229,16 @@ obsidian command id="dataview:dataview-force-refresh-views"
 7. **`daily:prepend`** inserts content after frontmatter, not at byte 0.
 8. **Use `eval`** to run arbitrary JavaScript against the Obsidian API (`app.*`).
 9. **`template:insert`** inserts into the currently active file in the Obsidian UI — it does not accept a `path=` parameter. If no file is open, it returns `Error: No active editor. Open a file first.` To create a file from a template via CLI, use `obsidian create path="..." template="..."` instead.
+10. **`property:set` stores list values as strings** — `value="tag1, tag2"` writes a literal comma-separated string, not a YAML array. For proper array fields, edit the note's frontmatter directly (e.g. via `read` → modify → `create --force`) or use `eval` to call the Obsidian API.
+11. **`eval` requires single-line JavaScript** — multiline JS passed inline fails with a token error. Write the script to a temp file instead:
+    ```bash
+    cat > /tmp/obs.js << 'JS'
+    var files = app.vault.getMarkdownFiles();
+    files.length;
+    JS
+    obsidian eval code="$(cat /tmp/obs.js)"
+    ```
+12. **Multi-vault targeting may not work in all environments** — `obsidian "My Vault" command` can return `Error: Command "My Vault" not found` on some setups. If this happens, omit the vault name (CLI targets the most recently active vault) and switch vaults manually in the Obsidian UI.
 
 ## Troubleshooting
 
@@ -240,3 +250,5 @@ obsidian command id="dataview:dataview-force-refresh-views"
 | Wrong vault targeted | Multi-vault ambiguity | Pass vault name as first arg |
 | IPC socket not found (Linux) | `PrivateTmp=true` in systemd | Set `PrivateTmp=false` |
 | Snap confinement issues | Snap restricts IPC | Use `.deb` package instead |
+| Multi-vault `"Name" command` fails | Vault name matching issue | Omit vault name; target most recent vault |
+| `property:set` list value is a string | CLI stores value as-is | Edit frontmatter directly or use `eval` |
