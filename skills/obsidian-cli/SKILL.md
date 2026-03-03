@@ -1,16 +1,17 @@
 ---
 name: obsidian-cli
 description: >
-  Interact with Obsidian vaults using the official Obsidian CLI (v1.12+).
-  Read, create, append, search, and manage notes, daily notes, properties, tags,
-  tasks, bookmarks, templates, themes, sync, plugins, and links — all from the terminal.
-  Use this skill whenever the user mentions Obsidian CLI, wants to automate Obsidian
-  vault operations, manage notes programmatically, script daily note workflows,
-  query vault metadata, or integrate Obsidian with AI agents or automation pipelines.
-  Also trigger when the user asks about controlling Obsidian from the command line,
-  building scripts around their knowledge base, or running headless Obsidian setups.
-  Even if the user just says "add something to my daily note" or "search my vault"
-  in a CLI/scripting context, this skill applies.
+  Use this skill for any workflow where the user controls Obsidian from a terminal
+  or script — not the GUI. Concrete triggers: running the `obsidian` binary and its
+  subcommands (daily:append, eval, tasks, orphans, search, property:set, etc.);
+  writing bash or Python scripts that automate vault operations; scheduling Obsidian
+  tasks via cron or systemd timers; debugging IPC socket errors or headless Linux
+  setups; evaluating JavaScript against the Obsidian API from a shell; or building
+  programmatic wrappers around the CLI. The single clearest signal: the user is
+  invoking or wants to invoke the `obsidian` command from a terminal rather than
+  clicking through the app. Skip for GUI-only questions, installing plugins or themes
+  through the Obsidian interface, iCloud/sync configuration, or processing markdown
+  files with tools that have no connection to the `obsidian` binary.
 ---
 
 # Obsidian CLI
