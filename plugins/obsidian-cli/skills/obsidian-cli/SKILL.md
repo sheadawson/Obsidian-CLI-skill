@@ -1,24 +1,26 @@
 ---
 name: obsidian-cli
 description: >
-  Interact with Obsidian vaults using the official Obsidian CLI (v1.12+).
-  Read, create, append, search, and manage notes, daily notes, properties, tags,
-  tasks, bookmarks, templates, themes, sync, plugins, and links — all from the terminal.
-  Use this skill whenever the user mentions Obsidian CLI, wants to automate Obsidian
-  vault operations, manage notes programmatically, script daily note workflows,
-  query vault metadata, or integrate Obsidian with AI agents or automation pipelines.
-  Also trigger when the user asks about controlling Obsidian from the command line,
-  building scripts around their knowledge base, or running headless Obsidian setups.
-  Even if the user just says "add something to my daily note" or "search my vault"
-  in a CLI/scripting context, this skill applies.
+  Use this skill whenever the user wants Claude to directly interact with their
+  Obsidian vault — reading a note or daily note, writing or appending content,
+  searching vault contents, counting or listing notes, managing tasks, moving or
+  renaming files, finding orphaned notes or broken links. Without this skill, Claude
+  has no way to access vault data or execute vault operations. Treat any request that
+  implies "go into my vault and do X" as a trigger — the user is asking Claude to act,
+  not to explain. Also trigger for vault automation, CLI scripting, or cron-based
+  workflows involving Obsidian. Skip for pure conceptual questions: how Obsidian's GUI
+  works, navigating settings menus, theme or plugin installation via the UI, or general
+  Dataview query syntax — anything where the user needs an explanation rather than
+  Claude performing a vault operation.
 ---
 
 # Obsidian CLI
 
 The official Obsidian CLI (released in v1.12, February 2026) lets you control every aspect of Obsidian from the terminal. It communicates with a running Obsidian desktop instance via IPC.
 
-> For the full command reference with all subcommands, flags and examples, read
-> `references/command-reference.md` in this skill folder.
+> Read `references/command-reference.md` when you need specific flags, output formats, or
+> subcommands for any command group. It covers all 130+ commands with full parameter tables
+> and has a table of contents at the top.
 
 ## Prerequisites
 
