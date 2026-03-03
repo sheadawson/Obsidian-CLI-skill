@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eval Set Review - obsidian-cli</title>
+  <title>Eval Set Review - obsidian-cli v2</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
@@ -39,7 +39,7 @@
 </head>
 <body>
   <h1>Eval Set Review: <span id="skill-name">obsidian-cli</span></h1>
-  <p class="description">Current description: <span id="skill-desc">Interact with Obsidian vaults using the official Obsidian CLI (v1.12+). Read, create, append, search, and manage notes, daily notes, properties, tags, tasks, bookmarks, templates, themes, sync, plugins, and links — all from the terminal. Use this skill whenever the user mentions Obsidian CLI, wants to automate Obsidian vault operations, manage notes programmatically, script daily note workflows, query vault metadata, or integrate Obsidian with AI agents or automation pipelines. Also trigger when the user asks about controlling Obsidian from the command line, building scripts around their knowledge base, or running headless Obsidian setups. Even if the user just says "add something to my daily note" or "search my vault" in a CLI/scripting context, this skill applies.</span></p>
+  <p class="description">Current description: <span id="skill-desc">Use this skill whenever the user wants Claude to interact with their Obsidian vault — reading notes, creating or appending content, searching, managing tasks, tags, properties, daily notes, bookmarks, templates, sync, plugins, or links. The underlying mechanism is the official Obsidian CLI (v1.12+), but trigger even when the user doesn't mention the CLI — phrases like "add this to my daily note", "search my vault", "create a note from template", or "what tasks do I have open?" all apply. Also trigger for explicit CLI usage: running obsidian subcommands from a shell, scripting or automating vault operations, scheduling via cron, debugging IPC/headless Linux setups, or building programmatic wrappers. Skip only for pure GUI questions (Obsidian settings navigation, theme/plugin installation via UI) or iCloud sync configuration that has nothing to do with vault content.</span></p>
 
   <div class="controls">
     <button class="btn btn-add" onclick="addRow()">+ Add Query</button>
@@ -62,83 +62,83 @@
   <script>
     const EVAL_DATA = [
   {
-    "query": "hey i need to automatically append meeting notes to today's daily note in obsidian from a bash script that runs after each zoom call ends",
+    "query": "add this to my daily note: 'reviewed the Q1 roadmap with sarah, she wants the mockups by friday'",
     "should_trigger": true
   },
   {
-    "query": "obsidian daily:append keeps failing on my headless ubuntu server, keeps showing 'IPC socket not found' — i'm running it as a systemd service",
+    "query": "search my vault for everything i've written about the Henderson project, i need to prep for a call",
     "should_trigger": true
   },
   {
-    "query": "how do i search my obsidian vault for all notes tagged #project/alpha using the cli and pipe the results into another script?",
+    "query": "what open tasks do i have in obsidian? just the incomplete ones",
     "should_trigger": true
   },
   {
-    "query": "i want to write a shell script that creates a new note in obsidian from a template and then sets the status property to 'in-progress' — what's the syntax for property:set?",
+    "query": "create a new note from my meeting-notes template and call it 'Standup 2026-03-04'",
     "should_trigger": true
   },
   {
-    "query": "my obsidian eval command works fine but i need to run multiline javascript against app.vault — the single-line approach isn't enough for what i'm trying to do",
+    "query": "append '- [ ] follow up with the design team about the nav bar' to my projects/mobile-redesign.md",
     "should_trigger": true
   },
   {
-    "query": "setting up a cron job to run obsidian tasks every morning and email me the incomplete ones — not sure what flags I need or what the output format looks like",
+    "query": "how many notes are in my vault right now? also which ones have no links pointing to them?",
     "should_trigger": true
   },
   {
-    "query": "i'm building a python wrapper around the obsidian cli to batch-update frontmatter across ~200 notes in my vault. how does property:set handle list-type fields?",
+    "query": "read me today's daily note",
     "should_trigger": true
   },
   {
-    "query": "trying to use the obsidian cli on my mac but the obsidian binary isn't in my PATH even though i enabled CLI in settings and restarted",
+    "query": "set the status property on projects/q2-launch.md to 'in-review'",
     "should_trigger": true
   },
   {
-    "query": "need to move about 50 notes from Projects/ to Archive/ in my obsidian vault without touching the GUI — is there a bulk-move option?",
+    "query": "i want to write a script that pulls all notes tagged #meeting from the past week and summarizes them",
     "should_trigger": true
   },
   {
-    "query": "can the obsidian cli get me a list of all orphan notes (no incoming links) as JSON? i want to feed that list into a cleanup script",
+    "query": "move everything in my Inbox/ folder to Archive/2026/ and update the daily note with a log entry",
     "should_trigger": true
   },
   {
-    "query": "how do i install the Dataview community plugin in obsidian? i've never installed a plugin before and don't know where to find it in the settings panel",
+    "query": "how do i change the accent color in obsidian? i want something more muted than the default purple",
     "should_trigger": false
   },
   {
-    "query": "writing a python script to bulk-rename markdown files in ~/notes — they all need a YYYY-MM-DD date prefix added to the filename based on their creation date",
+    "query": "i can't figure out how to enable community plugins in obsidian — the toggle is greyed out in safe mode",
     "should_trigger": false
   },
   {
-    "query": "i use Logseq for my daily notes and journaling, is there any CLI tool similar to what obsidian has that lets me append to today's journal from the terminal?",
+    "query": "does obsidian have a built-in kanban view or do i need a plugin for that?",
     "should_trigger": false
   },
   {
-    "query": "setting up a brand new obsidian vault for my zettelkasten — what folder structure and naming convention do you recommend for atomic notes?",
+    "query": "my icloud sync for obsidian keeps conflicting with files on my ipad — how do i resolve this without losing data?",
     "should_trigger": false
   },
   {
-    "query": "i want to use the obsidian web clipper extension to save full articles to my vault from chrome. how do i configure the template it uses?",
+    "query": "how do i set up the obsidian git plugin to auto-commit my vault every hour?",
     "should_trigger": false
   },
   {
-    "query": "building an obsidian plugin in TypeScript that hooks into the editor and adds a custom right-click context menu for formatting commands",
+    "query": "i use notion for my notes but i'm thinking of switching to obsidian — what's the best way to export from notion and import into obsidian?",
     "should_trigger": false
   },
   {
-    "query": "i need to read and update YAML frontmatter across a directory of markdown files using Python — something like python-frontmatter or ruamel.yaml",
+    "query": "in the dataview plugin, how do i write a query that shows all notes with a due-date property before today?",
     "should_trigger": false
   },
   {
-    "query": "how do i sync my obsidian vault to iCloud on mac? should i put it inside Documents or in a dedicated iCloud Drive folder to avoid conflicts?",
+    "query": "i want to customize the obsidian theme with css — how do i target the sidebar background color specifically?",
     "should_trigger": false
   },
   {
-    "query": "i want to export some obsidian notes to PDF to share with colleagues who don't use obsidian — what's the best way to do a batch export?",
+    "query": "what's the keyboard shortcut to open the command palette in obsidian on mac?",
     "should_trigger": false
   },
   {
-    "query": "implementing full-text search over a folder of markdown files in a node.js app — what's a lightweight library or algorithm for this? something like lunr or flexsearch?",
+    "query": "i'm writing a python script to parse markdown files from my notes folder and extract all the headings into a CSV — what's the best library for this?",
     "should_trigger": false
   }
 ];
@@ -148,11 +148,9 @@
     function render() {
       const tbody = document.getElementById('eval-body');
       tbody.innerHTML = '';
-
       const sorted = evalItems
         .map((item, origIdx) => ({ ...item, origIdx }))
         .sort((a, b) => (b.should_trigger ? 1 : 0) - (a.should_trigger ? 1 : 0));
-
       let lastGroup = null;
       sorted.forEach(item => {
         const group = item.should_trigger ? 'trigger' : 'no-trigger';
@@ -163,7 +161,6 @@
           tbody.appendChild(headerRow);
           lastGroup = group;
         }
-
         const idx = item.origIdx;
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -191,21 +188,18 @@
     function updateQuery(idx, value) { evalItems[idx].query = value; updateSummary(); }
     function updateTrigger(idx, value) { evalItems[idx].should_trigger = value; render(); }
     function deleteRow(idx) { evalItems.splice(idx, 1); render(); }
-
     function addRow() {
       evalItems.push({ query: '', should_trigger: true });
       render();
       const inputs = document.querySelectorAll('.query-input');
       inputs[inputs.length - 1].focus();
     }
-
     function updateSummary() {
       const trigger = evalItems.filter(i => i.should_trigger).length;
       const noTrigger = evalItems.filter(i => !i.should_trigger).length;
       document.getElementById('summary').textContent =
         `${evalItems.length} queries total: ${trigger} should trigger, ${noTrigger} should not trigger`;
     }
-
     function exportEvalSet() {
       const valid = evalItems.filter(i => i.query.trim() !== '');
       const data = valid.map(i => ({ query: i.query.trim(), should_trigger: i.should_trigger }));
@@ -219,7 +213,6 @@
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     }
-
     render();
   </script>
 </body>
