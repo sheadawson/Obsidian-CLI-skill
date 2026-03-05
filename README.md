@@ -71,7 +71,7 @@ If Claude tries to answer a vault request without executing any commands, just s
 **Option A — Marketplace install (recommended):**
 
 ```
-/plugin marketplace add https://github.com/pablo-mano/Obsidian-CLI-skill
+/plugin marketplace add https://github.com/sheadawson/Obsidian-CLI-skill
 /plugin install obsidian-cli
 ```
 
@@ -81,7 +81,7 @@ Done — see [Invoking the Skill](#invoking-the-skill) above for how to activate
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/pablo-mano/Obsidian-CLI-skill
+   git clone https://github.com/sheadawson/Obsidian-CLI-skill
    ```
 2. Load the plugin with the `--plugin-dir` flag:
    ```bash
@@ -95,7 +95,7 @@ Add to your project's `.claude/settings.json`:
 {
   "plugins": {
     "obsidian-cli": {
-      "source": { "source": "github", "repo": "pablo-mano/Obsidian-CLI-skill" }
+      "source": { "source": "github", "repo": "sheadawson/Obsidian-CLI-skill" }
     }
   }
 }
@@ -112,7 +112,7 @@ Cursor has a native skills system (launched Feb 2026) that is directly compatibl
 In a terminal:
 
 ```bash
-git clone --depth 1 https://github.com/pablo-mano/Obsidian-CLI-skill /tmp/Obsidian-CLI-skill
+git clone --depth 1 https://github.com/sheadawson/Obsidian-CLI-skill /tmp/Obsidian-CLI-skill
 mkdir -p ~/.cursor/skills
 cp -r /tmp/Obsidian-CLI-skill/skills/obsidian-cli ~/.cursor/skills/obsidian-cli
 rm -rf /tmp/Obsidian-CLI-skill
@@ -129,7 +129,7 @@ Cursor picks it up automatically — no restart needed.
 In a Cortex Code session, run:
 
 ```
-/skill add https://github.com/pablo-mano/Obsidian-CLI-skill.git
+/skill add https://github.com/sheadawson/Obsidian-CLI-skill.git
 ```
 
 Cortex Code clones the repo and caches the skill. Use `/skill sync obsidian-cli` to pull
@@ -139,14 +139,14 @@ updates later.
 
 ```bash
 mkdir -p .cortex/skills/obsidian-cli
-curl -sSL https://raw.githubusercontent.com/pablo-mano/Obsidian-CLI-skill/main/skills/obsidian-cli/SKILL.md \
+curl -sSL https://raw.githubusercontent.com/sheadawson/Obsidian-CLI-skill/main/skills/obsidian-cli/SKILL.md \
   -o .cortex/skills/obsidian-cli/SKILL.md
 ```
 
 Or clone the repo and copy:
 
 ```bash
-git clone https://github.com/pablo-mano/Obsidian-CLI-skill.git /tmp/obsidian-cli-skill
+git clone https://github.com/sheadawson/Obsidian-CLI-skill.git /tmp/obsidian-cli-skill
 cp -r /tmp/obsidian-cli-skill/skills/obsidian-cli .cortex/skills/
 ```
 

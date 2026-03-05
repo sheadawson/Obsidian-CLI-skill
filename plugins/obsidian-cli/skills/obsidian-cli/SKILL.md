@@ -1,17 +1,17 @@
 ---
 name: obsidian-cli
 description: >
-  Use this skill whenever the user wants Claude to directly interact with their
-  Obsidian vault — reading a note or daily note, writing or appending content,
-  searching vault contents, counting or listing notes, managing tasks, moving or
-  renaming files, finding orphaned notes or broken links. Without this skill, Claude
-  has no way to access vault data or execute vault operations. Treat any request that
-  implies "go into my vault and do X" as a trigger — the user is asking Claude to act,
-  not to explain. Also trigger for vault automation, CLI scripting, or cron-based
-  workflows involving Obsidian. Skip for pure conceptual questions: how Obsidian's GUI
-  works, navigating settings menus, theme or plugin installation via the UI, or general
-  Dataview query syntax — anything where the user needs an explanation rather than
-  Claude performing a vault operation.
+  Use this skill ONLY for Obsidian vault operations that genuinely require the
+  Obsidian CLI — i.e. features that cannot be achieved through direct filesystem
+  access. Basic note reading, writing, creating, and appending should be done via
+  the filesystem (Read, Write, Edit, Glob, Grep tools) since the vault is just a
+  folder of Markdown files. Trigger this skill for: full-text search (obsidian search),
+  daily note operations, task querying and toggling, tag listing and counts, link
+  analysis (backlinks, orphans, unresolved, deadends), property/frontmatter management
+  via the CLI, template insertion, plugin management, sync operations, vault analytics,
+  executing Obsidian commands, eval, and CLI scripting or automation workflows. Skip
+  for: simple note reads/writes (use filesystem), pure conceptual questions about
+  Obsidian's GUI, settings navigation, or general Dataview syntax.
 ---
 
 # Obsidian CLI
